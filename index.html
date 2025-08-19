@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,38 +9,14 @@
       background: #000;
       color: #0f0;
       font-family: 'Courier New', monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
-    }
-    .tv-frame {
-      width: 400px;
-      height: 350px; /* Increased height for completion bar */
-      background: #333;
-      border: 5px solid #555;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #000;
-      position: relative;
-      overflow: hidden;
-    }
-    .screen {
-      width: 100%;
-      height: 100%;
-      background: #000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      text-align: center;
       padding: 20px;
+      overflow: hidden;
     }
     h1 {
-      font-size: 2.5em;
+      font-size: 3em;
       text-shadow: 0 0 10px #0f0, 0 0 20px #0f0;
       animation: glitch 1s infinite;
-      margin: 0;
     }
     @keyframes glitch {
       2%, 64% { transform: translate(2px, 0) skew(0deg); }
@@ -48,29 +24,15 @@
       62% { transform: translate(0, 0) skew(5deg); }
     }
     #countdown {
-      font-size: 2em;
-      margin: 10px 0;
+      font-size: 5em;
+      margin: 20px 0;
       background: #111;
       padding: 10px;
       border: 2px dashed #0f0;
       display: inline-block;
     }
-    #completion-bar {
-      width: 80%;
-      height: 20px;
-      background: #111;
-      border: 2px solid #0f0;
-      margin-top: 10px;
-      overflow: hidden;
-    }
-    #completion-fill {
-      height: 100%;
-      background: #0f0;
-      width: 0%;
-      transition: width 1s linear; /* Smooth transition */
-    }
     .noise {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -78,37 +40,25 @@
       opacity: 0.1;
       background: url('https://www.transparenttextures.com/patterns/noise.png');
       pointer-events: none;
-      z-index: 1;
+      z-index: -1;
     }
   </style>
 </head>
 <body>
-  <div class="tv-frame">
-    <div class="noise"></div>
-    <div class="screen">
-      <h1>???</h1>
-      <div id="countdown">Calculating...</div>
-      <div id="completion-bar">
-        <div id="completion-fill"></div>
-      </div>
-    </div>
-  </div>
+  <div class="noise"></div>
+  <h1>???</h1>
+  <div id="countdown">Calculating...</div>
   <script>
-    // Target date: August 22, 2025, 6:00 PM EDT
-    const targetDate = new Date('2025-08-22T18:00:00-04:00'); // EDT is UTC-4
+    // Target: August 22, 2025, 6:00 PM EDT (UTC-4)
+    const targetDate = new Date('2025-08-22T18:00:00-04:00');
     const countdownElement = document.getElementById('countdown');
-    const completionFill = document.getElementById('completion-fill');
 
     function updateCountdown() {
       const now = new Date();
       const difference = targetDate - now;
-      const totalTime = targetDate - new Date('2025-08-19T13:54:00-04:00'); // Start from today's date and time
-      const elapsedTime = now - new Date('2025-08-19T13:54:00-04:00');
-      const progress = (elapsedTime / totalTime) * 100;
 
       if (difference <= 0) {
         countdownElement.textContent = "BOOM! Time's up!";
-        completionFill.style.width = '100%';
         return;
       }
 
@@ -118,4 +68,11 @@
       const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
       countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      completionFill.style.width = Math.min(progress, 100) + '%'; // Cap at 
+    }
+
+    // Tick every second
+    setInterval(updateCountdown, 1000);
+    updateCountdown(); // Kick it off
+  </script>
+</body>
+</html>
